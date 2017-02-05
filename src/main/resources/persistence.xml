@@ -7,20 +7,24 @@
        http://www.springframework.org/schema/context
        http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
 
-    <!-- Step 1 Enable discovery of spring component-->
+
+
+
+    <!-- Step 1  Enable discovery of spring component -->
     <context:component-scan base-package="com.springexample"/>
 
     <!-- Step 2 Define your datasource -->
     <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-        <property name="driverClassName" value="org.posstgresql.Driver"/>
+        <property name="driverClassName" value="org.postgresql.Driver"/>
         <property name="password" value="qwerty123"/>
         <property name="username" value="postgres"/>
-        <property name="url" value="jdbc:postgresql://localhost:5432/persistence"/>
+        <property name="url" value="jdbc:postgresql://localhost:5432/"/>
     </bean>
 
-    <!-- Step3 - Define session factory for Hibernate -->
+    <!-- Step 3 - Define session factory for Hibernte -->
     <bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
         <property name="dataSource" ref="dataSource"/>
+
         <property name="mappingResources">
             <list>
                 <value>com/springexample/persistence/domain/Person.hbm.xml</value>
@@ -33,21 +37,30 @@
                 <prop key="format_sql">true</prop>
                 <prop key="cache.use_second_level_cache">false</prop>
                 <prop key="hibernate.hbm2ddl.auto">create</prop>
-                <prop key="hibernate.current_session_context_class">
-                    org.springframework.orm.hibernate5.SpringSessionContext
-                </prop>
-
+                <prop key="hibernate.dialect">org.hibernate.dialect.PostgreSQL95Dialect</prop>
+                <prop key="hibernate.current_session_context_class">org.springframework.orm.hibernate5.SpringSessionContext</prop>
             </props>
         </property>
+
     </bean>
 
-    <!-- Step 4 Use hibernate transaction manager -->
+    <!-- Use hibernate transaction manager -->
     <bean id="transactionManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager">
         <property name="sessionFactory" ref="sessionFactory"/>
         <property name="dataSource" ref="dataSource"/>
-
     </bean>
-    <!-- Step 5 use to enable @Transactional in java code -->
+
+    <!--Step 5 use to enable @Transactional in java code -->
+
     <tx:annotation-driven transaction-manager="transactionManager"/>
+
+
+
+
+
+
+
+
+
 
 </beans>
