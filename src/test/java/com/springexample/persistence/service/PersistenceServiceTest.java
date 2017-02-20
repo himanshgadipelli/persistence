@@ -1,5 +1,7 @@
 package com.springexample.persistence.service;
 
+import com.springexample.persistence.domain.Address;
+import com.springexample.persistence.domain.AddressType;
 import com.springexample.persistence.domain.Person;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,9 +28,22 @@ public class PersistenceServiceTest {
     @Rollback(value = false)
     public void testService(){
         Person person = new Person();
+        // Set Person attributes
         person.setFirstName("Himansh");
         person.setLastName("Gadipelli");
 
+        // Set address atributes
+        Address addressHome = new Address();
+        addressHome.setAddressType(AddressType.HOME);
+        addressHome.setStreet("Spectacular run Pl");
+        addressHome.setCity("Chantilly");
+        addressHome.setZipcode(20152);
+        addressHome.setPerson(person);
+
+        // Link address to person
+        person.addAddress(addressHome);
+
+        // Save person
         personService.save(person);
     }
 }
